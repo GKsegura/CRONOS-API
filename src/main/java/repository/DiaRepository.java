@@ -20,7 +20,7 @@ public class DiaRepository {
     public Dia insertDia(Dia dia) {
         String sql = "INSERT INTO dias(data, inicioTrabalho, fimTrabalho, inicioAlmoco, fimAlmoco) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = SQLiteConnection.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, dia.getDataFormatada());
             ps.setString(2, dia.getInicioTrabalho() != null ? dia.getInicioTrabalho().toString() : null);
@@ -44,7 +44,7 @@ public class DiaRepository {
     public void updateDia(Dia dia) {
         String sql = "UPDATE dias SET inicioTrabalho=?, fimTrabalho=?, inicioAlmoco=?, fimAlmoco=? WHERE id=?";
         try (Connection conn = SQLiteConnection.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, dia.getInicioTrabalho() != null ? dia.getInicioTrabalho().toString() : null);
             ps.setString(2, dia.getFimTrabalho() != null ? dia.getFimTrabalho().toString() : null);
@@ -60,15 +60,17 @@ public class DiaRepository {
     }
 
     public Task insertTask(Task task, long diaId) {
-        String sql = "INSERT INTO tarefas(descricao, categoria, cliente, duracaoMin, dia_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tarefas(descricao, categoria, cliente, duracaoMin, obs, apontado, dia_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = SQLiteConnection.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, task.getDescricao());
             ps.setString(2, task.getCategoria() != null ? task.getCategoria().name() : null);
             ps.setString(3, task.getCliente());
             ps.setObject(4, task.getDuracaoMin(), Types.BIGINT);
-            ps.setLong(5, diaId);
+            ps.setString(5, task.getObs());
+            ps.setBoolean(6, task.isApontado());
+            ps.setLong(7, diaId);
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
@@ -83,15 +85,17 @@ public class DiaRepository {
     }
 
     public void updateTask(Task task) {
-        String sql = "UPDATE tarefas SET descricao=?, categoria=?, cliente=?, duracaoMin=? WHERE id=?";
+        String sql = "UPDATE tarefas SET descricao=?, categoria=?, cliente=?, duracaoMin=?, obs=?, apontado=? WHERE id=?";
         try (Connection conn = SQLiteConnection.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, task.getDescricao());
             ps.setString(2, task.getCategoria() != null ? task.getCategoria().name() : null);
             ps.setString(3, task.getCliente());
             ps.setObject(4, task.getDuracaoMin(), Types.BIGINT);
-            ps.setLong(5, task.getId());
+            ps.setString(5, task.getObs());
+            ps.setBoolean(6, task.isApontado());
+            ps.setLong(7, task.getId());
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -102,7 +106,7 @@ public class DiaRepository {
     public void deleteTaskById(long taskId) {
         String sql = "DELETE FROM tarefas WHERE id=?";
         try (Connection conn = SQLiteConnection.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, taskId);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -143,7 +147,7 @@ public class DiaRepository {
 
     private List<Task> findTasksByDia(long diaId) {
         List<Task> tarefas = new ArrayList<>();
-        String sql = "SELECT * FROM tarefas WHERE dia_id=?";
+        String sql = "SELECT * FROM tarefas WHERE dia_id=? ORDER BY descricao";
         try (Connection conn = SQLiteConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -155,9 +159,10 @@ public class DiaRepository {
                             rs.getString("descricao"),
                             rs.getString("categoria") != null ? Categoria.valueOf(rs.getString("categoria")) : null,
                             rs.getString("cliente"),
-                            rs.getObject("duracaoMin") != null ? rs.getLong("duracaoMin") : null
+                            rs.getObject("duracaoMin") != null ? rs.getLong("duracaoMin") : null,
+                            rs.getString("obs"),
+                            rs.getBoolean("apontado")
                     );
-                    t.setId(rs.getLong("id"));
                     tarefas.add(t);
                 }
             }
@@ -207,6 +212,4 @@ public class DiaRepository {
             return false;
         }
     }
-
-    
 }

@@ -23,8 +23,10 @@ public class TableCreator {
                 "categoria TEXT," +
                 "cliente TEXT," +
                 "duracaoMin INTEGER," +
+                "obs TEXT," +
+                "apontado INTEGER DEFAULT 0," +
                 "dia_id INTEGER," +
-                "FOREIGN KEY(dia_id) REFERENCES dias(id));");
+                "FOREIGN KEY(dia_id) REFERENCES dias(id) ON DELETE CASCADE);");
     }
 
     public static void criarTabelas() {
@@ -34,6 +36,8 @@ public class TableCreator {
             for (String sql : TABLES.values()) {
                 stmt.execute(sql);
             }
+
+            System.out.println("Tabelas criadas/verificadas com sucesso!");
 
         } catch (SQLException e) {
             System.err.println("Erro crítico ao criar as tabelas: " + e.getMessage());

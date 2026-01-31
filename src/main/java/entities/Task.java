@@ -6,15 +6,19 @@ public class Task implements Comparable<Task> {
     private Categoria categoria;
     private String cliente;
     private Long duracaoMin;
+    private String obs;
+    private boolean apontado;
 
     public Task() {
     }
 
-    public Task(String descricao, Categoria categoria, String cliente, Long duracaoMin) {
+    public Task(String descricao, Categoria categoria, String cliente, Long duracaoMin, String obs, boolean apontado) {
         this.descricao = descricao;
         this.categoria = categoria;
         this.cliente = cliente;
         this.duracaoMin = duracaoMin;
+        this.obs = obs;
+        this.apontado = apontado;
     }
 
     public Long getId() {
@@ -55,6 +59,22 @@ public class Task implements Comparable<Task> {
 
     public void setDuracaoMin(Long duracaoMin) {
         this.duracaoMin = duracaoMin;
+    }
+
+    public String getObs() {
+        return obs;
+    }
+
+    public void setObs(String obs) {
+        this.obs = obs;
+    }
+
+    public boolean isApontado() {
+        return apontado;
+    }
+
+    public void setApontado(boolean apontado) {
+        this.apontado = apontado;
     }
 
     @Override

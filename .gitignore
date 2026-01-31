@@ -74,3 +74,8 @@ database.db
 *.ear
 *.zip
 *.tar.gz
+
+# -----------------------
+# Arquivo de banco de dados local
+# -----------------------
+database.db
