@@ -18,9 +18,9 @@ public class ApiServer {
         Gson gson = createGsonWithAdapters();
 
         port(PORT);
+        staticFiles.location("/public");
         configureCORS();
 
-        // Registrar controllers
         new DiaController(gson);
         new TaskController(gson);
         new ClienteController(gson);

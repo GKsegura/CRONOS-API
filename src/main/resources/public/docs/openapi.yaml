@@ -1,0 +1,332 @@
+openapi: 3.0.3
+info:
+  title: Cronos API
+  description: |
+    API responsável pelo controle de apontamentos de trabalho,
+    dias, tarefas, clientes e exportação de relatórios em Excel.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Ambiente local
+
+tags:
+  - name: Dias
+  - name: Tarefas
+  - name: Clientes
+  - name: Categorias
+  - name: Exportação
+
+paths:
+
+  /api/categorias:
+    get:
+      tags: [Categorias]
+      summary: Lista categorias disponíveis
+      responses:
+        '200':
+          description: Lista de categorias
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /api/clientes:
+    get:
+      tags: [Clientes]
+      summary: Lista clientes
+      responses:
+        '200':
+          description: Lista de clientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    valor:
+                      type: string
+                    nome:
+                      type: string
+
+  /api/clientes/nomes:
+    get:
+      tags: [Clientes]
+      summary: Lista nomes dos clientes
+      responses:
+        '200':
+          description: Lista de nomes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /api/dias:
+    get:
+      tags: [Dias]
+      summary: Lista todos os dias
+      responses:
+        '200':
+          description: Lista de dias
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dia'
+
+    post:
+      tags: [Dias]
+      summary: Cria um novo dia
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiaRequest'
+      responses:
+        '201':
+          description: Dia criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dia'
+
+  /api/dias/{id}:
+    get:
+      tags: [Dias]
+      summary: Busca dia por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Dia encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dia'
+        '404':
+          description: Dia não encontrado
+
+    put:
+      tags: [Dias]
+      summary: Atualiza um dia
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiaRequest'
+      responses:
+        '200':
+          description: Dia atualizado
+
+    delete:
+      tags: [Dias]
+      summary: Remove um dia
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Dia removido
+
+  /api/dias/data/{data}:
+    get:
+      tags: [Dias]
+      summary: Busca dia por data
+      parameters:
+        - in: path
+          name: data
+          required: true
+          schema:
+            type: string
+            example: "21/01/2025"
+      responses:
+        '200':
+          description: Dia encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dia'
+
+  /api/tarefas/{diaId}:
+    get:
+      tags: [Tarefas]
+      summary: Lista tarefas de um dia
+      parameters:
+        - in: path
+          name: diaId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de tarefas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tarefa'
+
+    post:
+      tags: [Tarefas]
+      summary: Cria uma nova tarefa
+      parameters:
+        - in: path
+          name: diaId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TarefaRequest'
+      responses:
+        '201':
+          description: Tarefa criada
+
+  /api/tarefas/id/{id}:
+    put:
+      tags: [Tarefas]
+      summary: Atualiza uma tarefa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TarefaRequest'
+      responses:
+        '200':
+          description: Tarefa atualizada
+
+    delete:
+      tags: [Tarefas]
+      summary: Remove uma tarefa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Tarefa removida
+
+  /api/export/excel/{mes}/{ano}:
+    get:
+      tags: [Exportação]
+      summary: Exporta apontamentos do mês em Excel
+      parameters:
+        - in: path
+          name: mes
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - in: path
+          name: ano
+          required: true
+          schema:
+            type: integer
+            example: 2025
+      responses:
+        '200':
+          description: Arquivo Excel gerado
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+
+components:
+  schemas:
+
+    Dia:
+      type: object
+      properties:
+        id:
+          type: integer
+        data:
+          type: string
+          example: "21/01/2025"
+        inicioTrabalho:
+          type: string
+          example: "08:00"
+        fimTrabalho:
+          type: string
+          example: "17:00"
+        inicioAlmoco:
+          type: string
+          example: "12:00"
+        fimAlmoco:
+          type: string
+          example: "13:00"
+        tarefas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tarefa'
+
+    DiaRequest:
+      type: object
+      properties:
+        data:
+          type: string
+          example: "21/01/2025"
+        inicioTrabalho:
+          type: string
+        fimTrabalho:
+          type: string
+        inicioAlmoco:
+          type: string
+        fimAlmoco:
+          type: string
+
+    Tarefa:
+      type: object
+      properties:
+        id:
+          type: integer
+        descricao:
+          type: string
+
+    TarefaRequest:
+      type: object
+      required:
+        - descricao
+      properties:
+        descricao:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
