@@ -163,6 +163,7 @@ public class DiaRepository {
                             rs.getString("obs"),
                             rs.getBoolean("apontado")
                     );
+                    t.setId(rs.getLong("id"));
                     tarefas.add(t);
                 }
             }

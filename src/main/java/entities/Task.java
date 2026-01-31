@@ -69,6 +69,12 @@ public class Task implements Comparable<Task> {
         this.obs = obs;
     }
 
+    // Getter adicional para compatibilidade com Gson
+    public boolean getApontado() {
+        return apontado;
+    }
+
+    // Getter padrão para boolean
     public boolean isApontado() {
         return apontado;
     }

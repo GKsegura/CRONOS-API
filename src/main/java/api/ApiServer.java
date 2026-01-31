@@ -27,8 +27,8 @@ public class ApiServer {
         new CategoriaController(gson);
         new ExportController(gson);
 
-        System.out.println("✓ API Cronos rodando em http://localhost:" + PORT);
-        System.out.println("✓ Documentação disponível em /docs");
+        System.out.println("API Cronos rodando em http://localhost:" + PORT);
+        System.out.println("Documentação disponível em /docs");
     }
 
     private static Gson createGsonWithAdapters() {

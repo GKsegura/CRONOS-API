@@ -52,8 +52,6 @@ public class ClienteController {
                 return gson.toJson(new ErrorResponse("Erro ao listar nomes: " + e.getMessage()));
             }
         });
-
-        System.out.println("Rotas de clientes registradas");
     }
 
     static class ErrorResponse {
