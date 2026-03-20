@@ -1,7 +1,7 @@
 package service;
 
 import entities.Dia;
-import repository.DiaRepository;
+import repositories.DiaRepository;
 
 import java.time.LocalTime;
 

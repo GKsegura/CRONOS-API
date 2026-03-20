@@ -2,7 +2,7 @@ package api;
 
 import com.google.gson.Gson;
 import entities.Dia;
-import repository.DiaRepository;
+import repositories.DiaRepository;
 import service.ApontamentoExcelService;
 import spark.Spark;
 

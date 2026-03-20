@@ -26,6 +26,7 @@ public class ApiServer {
         new ClienteController(gson);
         new CategoriaController(gson);
         new ExportController(gson);
+        new BacklogController(gson);
 
         System.out.println("API Cronos rodando em http://localhost:" + PORT);
         System.out.println("Documentação disponível em /docs");

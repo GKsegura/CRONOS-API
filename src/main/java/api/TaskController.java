@@ -2,7 +2,7 @@ package api;
 
 import com.google.gson.Gson;
 import entities.Task;
-import repository.DiaRepository;
+import repositories.DiaRepository;
 import spark.Spark;
 
 /**

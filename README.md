@@ -37,7 +37,7 @@ src/
 │   ├── Categoria.java           # Enum de categorias
 │   └── Cliente.java             # Enum de clientes
 │
-├── repository/                   # Acesso aos dados
+├── repositories/                   # Acesso aos dados
 │   └── DiaRepository.java       # CRUD de dias e tarefas
 │
 ├── service/                      # Lógica de negócio

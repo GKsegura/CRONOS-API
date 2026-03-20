@@ -3,7 +3,7 @@ package api;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import entities.Dia;
-import repository.DiaRepository;
+import repositories.DiaRepository;
 import spark.Spark;
 
 import java.time.LocalDate;
