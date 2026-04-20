@@ -30,6 +30,7 @@ public class BacklogController {
             try {
                 return gson.toJson(repo.findAll());
             } catch (Exception e) {
+                e.printStackTrace();
                 res.status(500);
                 return erro(gson, "Erro ao buscar backlog: " + e.getMessage());
             }

@@ -7,7 +7,6 @@ import java.sql.SQLException;
 public class SQLiteConnection {
 
     private static final String URL = "jdbc:sqlite:database.db";
-    private static Connection conn;
 
     private SQLiteConnection() {}
 
@@ -20,13 +19,6 @@ public class SQLiteConnection {
     }
 
     public static Connection getConnection() throws SQLException {
-        if (conn == null || conn.isClosed()) {
-            synchronized (SQLiteConnection.class) {
-                if (conn == null || conn.isClosed()) {
-                    conn = DriverManager.getConnection(URL);
-                }
-            }
-        }
-        return conn;
+        return DriverManager.getConnection(URL);
     }
 }

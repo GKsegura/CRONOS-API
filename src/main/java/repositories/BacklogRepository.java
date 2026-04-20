@@ -215,7 +215,13 @@ public class BacklogRepository {
         b.setId(rs.getLong("id"));
         b.setDescricao(rs.getString("descricao"));
         b.setCliente(rs.getString("cliente"));
-        b.setDuracaoMin(rs.getObject("duracaoMin", Long.class));
+
+        String duracaoStr = rs.getString("duracaoMin");
+        if (duracaoStr != null && !duracaoStr.isBlank()) {
+            try { b.setDuracaoMin(Long.parseLong(duracaoStr)); }
+            catch (NumberFormatException ignored) {}
+        }
+
         b.setObs(rs.getString("obs"));
         b.setPrioridade(rs.getInt("prioridade"));
         b.setDataCriacao(rs.getString("dataCriacao"));
